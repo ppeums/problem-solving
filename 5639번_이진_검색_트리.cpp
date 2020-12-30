@@ -1,4 +1,6 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
+// 시간복잡도 O(N^2) (N: 노드수)
+
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 using namespace std;
 
