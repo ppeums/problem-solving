@@ -1,4 +1,6 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
+﻿// 시간복잡도 nmC3 * NM
+
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <vector>
 #include <queue>
