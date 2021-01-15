@@ -1,4 +1,6 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
+// 시간복잡도 O(NM) (M: 총추천횟수)
+
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <queue>
 #include <vector>
@@ -8,16 +10,16 @@ using namespace std;
 #define MAX 101
 #define INF 987654321
 
-int N, K, num;
+int N, M, num;
 int vote[MAX];
 queue<int> q;
 vector<int> v;
 
 int main()
 {
-	scanf("%d %d", &N, &K);
+	scanf("%d %d", &N, &M);
 
-	for (int i = 0; i < K; i++) {
+	for (int i = 0; i < M; i++) {
 		scanf("%d", &num);
 		int size = q.size();
 		if (size < N) {
