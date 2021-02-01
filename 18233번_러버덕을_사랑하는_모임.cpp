@@ -22,13 +22,14 @@ void DFS(int start, int cnt) {
 			smax += input[idx].second;
 		}
 		if (E >= smin && E <= smax) {
-			for (int i = 1; i <= N; i++) {
-				if (smin == E) {
-					isAnswer = true;
-					break;
-				}
-				if (doll[i] > 0 && doll[i] < input[i].second) {
-					doll[i]++, smin++;
+			while (!isAnswer) {
+				for (int i = 1; i <= N; i++) {
+					if (smin == E) {
+						isAnswer = true;
+						break;
+					}
+					if (doll[i] > 0 && doll[i] < input[i].second)
+						doll[i]++, smin++;
 				}
 			}
 		}
@@ -47,7 +48,7 @@ void DFS(int start, int cnt) {
 }
 
 int main()
-{	
+{
 	scanf("%d %d %d", &N, &P, &E);
 
 	for (int i = 1; i <= N; i++) {
