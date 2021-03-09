@@ -2,55 +2,42 @@
 #include <iostream>
 using namespace std;
 
-#define LMAX 4000001
 #define MMAX 1002
-#define INF 987654321
 
-int N, M, L;
-int spot[LMAX], cut[MMAX], piece[MMAX];
+int N, M, L, Q;
+int arr[MMAX];
 
-int getClose(int n) {
-	int mini = INF, ret = 0;
-	for (int i = 0; i < M; i++) {
-		int diff = abs(spot[i] - n);
-		if (diff < mini) {
-			mini = diff;
-			ret = spot[i];
+bool canCut(int size) {
+	int now = 0, cnt = 0;
+	for (int i = 0; i <= M; i++) {
+		now += arr[i];
+		if (now >= size) {
+			cnt++;
+			now = 0;
 		}
-		else break;
 	}
-	return ret;
+	return (cnt >= Q + 1);
 }
 
 int main()
 {
 	scanf("%d %d %d", &N, &M, &L);
 	for (int i = 0; i < M; i++) {
-		scanf("%d", &spot[i]);
+		scanf("%d", &arr[i]);
+	}
+	arr[M] = L;
+	for (int j = M; j > 0; j--) {
+		arr[j] -= arr[j - 1];
 	}
 	for (int i = 0; i < N; i++) {
-		int num, div;
-		scanf("%d", &num);
-		for (int j = 0, k = num + 1; j < num; j++, k--) {
-			if (j == 0)
-				div = L / k;
-			else
-				div = (L - cut[j - 1]) / k + cut[j - 1];
-			cut[j] = getClose(div);
+		scanf("%d", &Q);
+		int low = 0, high = L;
+		while (high - low > 1) {
+			int mid = (low + high) / 2;
+			if (canCut(mid)) low = mid;
+			else high = mid;
 		}
-
-		cut[num] = L;
-		piece[0] = cut[0];
-		for (int j = 1; j <= num; j++) {
-			piece[j] = cut[j] - cut[j - 1];
-		}
-
-		int mini = INF;
-		for (int j = 0; j <= num; j++) {
-			mini = (mini > piece[j]) ? piece[j] : mini;
-		}
-		printf("%d\n", mini);
+		printf("%d\n", low);
 	}
-
 	return 0;
 }
