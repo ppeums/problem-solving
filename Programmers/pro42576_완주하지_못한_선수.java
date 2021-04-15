@@ -4,18 +4,18 @@ import java.util.Map;
 class Solution {
     public String solution(String[] participant, String[] completion) {
         String answer = "";
-        Map<String, Integer> h = new HashMap<>();
+        Map<String, Integer> hm = new HashMap<>();
         for (String p : participant) {
-            h.put(p, 0);
+            hm.put(p, 0);
         }
         for (String p : participant) {
-            h.put(p, h.get(p) + 1);
+            hm.put(p, hm.get(p) + 1);
         }
         for (String c : completion) {
-            h.put(c, h.get(c) - 1);
+            hm.put(c, hm.get(c) - 1);
         }
         for (String p : participant) {
-            if (h.get(p) == 1) {
+            if (hm.get(p) == 1) {
                 answer = p;
                 break;
             }
