@@ -3,11 +3,10 @@ class Solution {
         String answer = "";
         String[] arr = {"4", "1", "2"};
         while (n > 0) {
-            answer = arr[n % 3] + answer;
-            if (n % 3 == 0)
-                n = n / 3 - 1;
-            else
-                n = n / 3;
+            int idx = n % 3;
+            answer = arr[idx] + answer;
+            n /= 3;
+            if (idx == 0) n--;
         }
         return answer;
     }
