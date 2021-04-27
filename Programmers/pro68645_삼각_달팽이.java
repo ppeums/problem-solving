@@ -1,48 +1,28 @@
 class Solution {
     public int[] solution(int n) {
-        int len = 0;
-        for (int i = 1; i <= n; i++)
-            len += i;
-        int[] answer = new int[len];
+        int len = n * (n + 1) / 2, num = 1, y = 0, x = 0;
         int[][] arr = new int[n][n];
-        int x = 0, y = 0, num = 1;
+        int[] answer = new int[len];
         while (true) {
             if (num > len) break;
-            while (true) {
-                if (y < 0 || y >= n || x < 0 || x >= n || arr[y][x] != 0) {
-                    y--;
-                    x++;
-                    break;
-                }
-                arr[y][x] = num++;
-                y++;
+            for (int i = 0; i < n; i++) {
+                arr[y++][x] = num++;
             }
-            while (true) {
-                if (y < 0 || y >= n || x < 0 || x >= n || arr[y][x] != 0) {
-                    y--;
-                    x -= 2;
-                    break;
-                }
-                arr[y][x] = num++;
-                x++;
+            n--; y--; x++;
+            for (int i = 0; i < n; i++) {
+                arr[y][x++] = num++;
             }
-            while (true) {
-                if (y < 0 || y >= n || x < 0 || x >= n || arr[y][x] != 0) {
-                    y += 2;
-                    x++;
-                    break;
-                }
-                arr[y][x] = num++;
-                y--;
-                x--;
+            n--; y--; x -= 2;
+            for (int i = 0; i < n; i++) {
+                arr[y--][x--] = num++;
             }
+            n--; x++; y += 2;
         }
         int idx = 0;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (arr[i][j] != 0)
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr.length; j++) {
+                if (arr[i][j] > 0)
                     answer[idx++] = arr[i][j];
-                else break;
             }
         }
         return answer;
