@@ -2,15 +2,13 @@ import java.util.Arrays;
 
 class Solution {
     public int solution(int[] people, int limit) {
-        int answer = 0;
+        int answer = 0, l = 0, r = people.length - 1;
         Arrays.sort(people);
-        int l = 0, r = people.length - 1;
         while (l < r) {
-            int sum = people[l] + people[r];
-            if (sum <= limit)
+            if (people[l] + people[r] <= limit)
                 l++;
-            r--;
             answer++;
+            r--;
         }
         if (l == r) answer++;
         return answer;
