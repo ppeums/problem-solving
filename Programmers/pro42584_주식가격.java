@@ -4,16 +4,17 @@ class Solution {
     public int[] solution(int[] prices) {
         int[] answer = new int[prices.length];
         Stack<Integer> st = new Stack<>();
-        for (int i = 0; i < prices.length; i++) {
+        st.add(0);
+        for (int i = 1; i < prices.length; i++) {
             while (!st.isEmpty() && prices[st.peek()] > prices[i]) {
                 int top = st.pop();
                 answer[top] = i - top;
             }
-            st.push(i);
+            st.add(i);
         }
         while (!st.isEmpty()) {
             int top = st.pop();
-            answer[top] = prices.length - 1 - top;
+            answer[top] = answer.length - 1 - top;
         }
         return answer;
     }
