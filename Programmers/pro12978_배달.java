@@ -1,32 +1,26 @@
-import java.util.ArrayList;
+import java.util.Arrays;
 
 class Solution {
-    static ArrayList<Integer>[] arr;
-    static boolean[] visit;
-    static int[][] time;
-    static int[] dist;
     static int n;
+    static int[] dist;
+    static int[][] cost;
+    static boolean[] visit;
+    static boolean[][] link;
 
     public int solution(int N, int[][] road, int K) {
         int answer = 0;
-        arr = new ArrayList[N + 1];
-        visit = new boolean[N + 1];
-        time = new int[N + 1][N + 1];
-        dist = new int[N + 1];
         n = N;
-        for (int i = 1; i <= N; i++) {
-            arr[i] = new ArrayList<>();
-            dist[i] = Integer.MAX_VALUE;
-        }
+        dist = new int[N + 1];
+        cost = new int[N + 1][N + 1];
+        visit = new boolean[N + 1];
+        link = new boolean[N + 1][N + 1];
         for (int i = 0; i < road.length; i++) {
-            int a = road[i][0];
-            int b = road[i][1];
-            arr[a].add(b);
-            arr[b].add(a);
-            time[a][b] = time[b][a] = (time[a][b] == 0) ? road[i][2] : Math.min(time[a][b], road[i][2]);
+            int start = road[i][0], end = road[i][1], time = road[i][2];
+            link[start][end] = link[end][start] = true;
+            cost[start][end] = cost[end][start] = (cost[start][end] == 0) ? time : Math.min(time, cost[start][end]);
         }
         dijkstra();
-        for (int i = 1; i <= n; i++) {
+        for (int i = 1; i <= N; i++) {
             if (dist[i] <= K)
                 answer++;
         }
@@ -34,25 +28,27 @@ class Solution {
     }
 
     static void dijkstra() {
+        Arrays.fill(dist, Integer.MAX_VALUE);
         dist[1] = 0;
         visit[1] = true;
-        for (int i = 0; i < arr[1].size(); i++) {
-            int next = arr[1].get(i);
-            dist[next] = time[1][next];
+        for (int i = 1; i <= n; i++) {
+            if (link[1][i])
+                dist[i] = cost[1][i];
         }
         for (int i = 0; i < n - 1; i++) {
             int min = Integer.MAX_VALUE;
             int idx = -1;
             for (int j = 1; j <= n; j++) {
-                if (!visit[j] && min > dist[j]) {
+                if (!visit[j] && dist[j] < min) {
                     min = dist[j];
                     idx = j;
                 }
             }
             visit[idx] = true;
             for (int j = 1; j <= n; j++) {
-                if (!visit[j] && time[idx][j] != 0 && dist[j] > dist[idx] + time[idx][j])
-                    dist[j] = dist[idx] + time[idx][j];
+                if (!visit[j] && link[idx][j] && dist[j] > dist[idx] + cost[idx][j]) {
+                    dist[j] = dist[idx] + cost[idx][j];
+                }
             }
         }
     }
