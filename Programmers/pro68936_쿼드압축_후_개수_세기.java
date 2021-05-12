@@ -1,8 +1,9 @@
 class Solution {
-    static int[] answer = new int[2];
     static int[][] map;
+    static int[] answer;
 
     public int[] solution(int[][] arr) {
+        answer = new int[2];
         map = arr;
         func(0, 0, arr.length);
         return answer;
@@ -17,14 +18,17 @@ class Solution {
                     break;
                 }
             }
+            if (!isSame) {
+                break;
+            }
         }
-        if (isSame)
+        if (isSame) {
             answer[map[y][x]]++;
-        else {
+        } else {
             n /= 2;
             func(y, x, n);
-            func(y + n, x, n);
             func(y, x + n, n);
+            func(y + n, x, n);
             func(y + n, x + n, n);
         }
     }
