@@ -9,26 +9,24 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int H = Integer.parseInt(st.nextToken());
         int W = Integer.parseInt(st.nextToken());
-        int[] arr = new int[W];
+        int[] block = new int[W];
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < W; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
+            block[i] = Integer.parseInt(st.nextToken());
         }
-        int sum = 0;
+        int answer = 0;
         for (int i = 1; i < W - 1; i++) {
-            int left = 0, right = 0, min = 0;
+            int left = 0, right = 0;
             for (int j = 0; j < i; j++) {
-                left = Math.max(left, arr[j]);
+                left = Math.max(left, block[j]);
             }
             for (int j = i + 1; j < W; j++) {
-                right = Math.max(right, arr[j]);
+                right = Math.max(right, block[j]);
             }
-            min = Math.min(left, right);
-            if (min > arr[i]) {
-                sum += min - arr[i];
-            }
+            int diff = Math.min(left, right) - block[i];
+            answer += (diff > 0) ? diff : 0;
         }
-        bw.write(sum + "\n");
+        bw.write(answer + "\n");
         bw.flush();
         bw.close();
         br.close();
