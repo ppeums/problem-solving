@@ -5,11 +5,11 @@ class Solution {
         Arrays.sort(times);
         long answer = Long.MAX_VALUE, left = 1, right = n * (long) times[times.length - 1];
         while (left <= right) {
-            long mid = (left + right) / 2, tmp = 0;
+            long mid = (left + right) / 2, sum = 0;
             for (int i = 0; i < times.length; i++) {
-                tmp += mid / times[i];
+                sum += mid / times[i];
             }
-            if (tmp < n) {
+            if (sum < n) {
                 left = mid + 1;
             } else {
                 answer = Math.min(answer, mid);
