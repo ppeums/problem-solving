@@ -4,44 +4,35 @@ import java.util.Set;
 class Solution {
     public int solution(int n, int[][] results) {
         int answer = 0;
-        Player[] plist = new Player[n + 1];
+        Set<Integer>[] winner = new Set[n + 1];
+        Set<Integer>[] loser = new Set[n + 1];
         for (int i = 1; i <= n; i++) {
-            plist[i] = new Player();
+            winner[i] = new HashSet<>();
+            loser[i] = new HashSet<>();
         }
         for (int i = 0; i < results.length; i++) {
-            int win = results[i][0];
-            int lose = results[i][1];
-            plist[win].weak.add(lose);
-            plist[lose].strong.add(win);
+            loser[results[i][0]].add(results[i][1]);
+            winner[results[i][1]].add(results[i][0]);
         }
         for (int i = 0; i < n; i++) {
             for (int j = 1; j <= n; j++) {
-                Set<Integer> sset = new HashSet<>();
-                for (Integer strong : plist[j].strong) {
-                    for (Integer st : plist[strong].strong) {
-                        sset.add(st);
-                    }
+                Set<Integer> winSet = new HashSet<>();
+                for (Integer win : winner[j]) {
+                    winSet.addAll(winner[win]);
                 }
-                plist[j].strong.addAll(sset);
-                Set<Integer> wset = new HashSet<>();
-                for (Integer weak : plist[j].weak) {
-                    for (Integer wk : plist[weak].weak) {
-                        wset.add(wk);
-                    }
+                winner[j].addAll(winSet);
+                Set<Integer> loseSet = new HashSet<>();
+                for (Integer lose : loser[j]) {
+                    loseSet.addAll(loser[lose]);
                 }
-                plist[j].weak.addAll(wset);
+                loser[j].addAll(loseSet);
             }
         }
         for (int i = 1; i <= n; i++) {
-            if (plist[i].strong.size() + plist[i].weak.size() == n - 1) {
+            if (winner[i].size() + loser[i].size() == n - 1) {
                 answer++;
             }
         }
         return answer;
-    }
-
-    static class Player {
-        Set<Integer> strong = new HashSet<>();
-        Set<Integer> weak = new HashSet<>();
     }
 }
