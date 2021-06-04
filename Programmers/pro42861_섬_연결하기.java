@@ -6,19 +6,12 @@ class Solution {
     public int solution(int n, int[][] costs) {
         int answer = 0;
         parent = new int[n];
-        Bridge[] arr = new Bridge[costs.length];
-        for (int i = 0; i < costs.length; i++) {
-            Arrays.sort(costs[i], 0, 2);
-            arr[i] = new Bridge(costs[i][0], costs[i][1], costs[i][2]);
-        }
-        Arrays.sort(arr);
+        Arrays.sort(costs, (o1, o2) -> (Integer.compare(o1[2], o2[2])));
         init(n);
-        for (int i = 0; i < arr.length; i++) {
-            int x = find(arr[i].start);
-            int y = find(arr[i].end);
-            if (x != y) {
-                union(x, y);
-                answer += arr[i].cost;
+        for (int[] cost : costs) {
+            if (find(cost[0]) != find(cost[1])) {
+                union(cost[0], cost[1]);
+                answer += cost[2];
             }
         }
         return answer;
@@ -31,31 +24,15 @@ class Solution {
     }
 
     static int find(int x) {
-        if (x == parent[x]) {
+        if (parent[x] == x) {
             return x;
-        } else {
-            return find(parent[x]);
         }
+        return find(parent[x]);
     }
 
     static void union(int x, int y) {
         x = find(x);
         y = find(y);
         parent[y] = x;
-    }
-
-    static class Bridge implements Comparable<Bridge> {
-        int start, end, cost;
-
-        public Bridge(int start, int end, int cost) {
-            this.start = start;
-            this.end = end;
-            this.cost = cost;
-        }
-
-        @Override
-        public int compareTo(Bridge o) {
-            return Integer.compare(this.cost, o.cost);
-        }
     }
 }
