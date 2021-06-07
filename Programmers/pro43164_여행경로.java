@@ -10,12 +10,10 @@ class Solution {
         input = tickets;
         visited = new boolean[tickets.length];
         answer = new ArrayList<>();
-        int routeIdx = 0;
         for (int i = 0; i < tickets.length; i++) {
             if (tickets[i][0].equals("ICN")) {
                 visited[i] = true;
-                String route = tickets[i][0] + "," + tickets[i][1];
-                dfs(1, tickets[i][1], route);
+                dfs(tickets[i][1], tickets[i][0] + "," + tickets[i][1], 1);
                 visited[i] = false;
             }
         }
@@ -23,15 +21,15 @@ class Solution {
         return answer.get(0).split(",");
     }
 
-    static void dfs(int ticketCnt, String end, String route) {
-        if (ticketCnt == input.length) {
+    static void dfs(String before, String route, int ticketCount) {
+        if (ticketCount == input.length) {
             answer.add(route);
             return;
         }
         for (int i = 0; i < input.length; i++) {
-            if (!visited[i] && input[i][0].equals(end)) {
+            if (!visited[i] && input[i][0].equals(before)) {
                 visited[i] = true;
-                dfs(ticketCnt + 1, input[i][1], route + "," + input[i][1]);
+                dfs(input[i][1], route + "," + input[i][1], ticketCount + 1);
                 visited[i] = false;
             }
         }
