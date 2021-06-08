@@ -4,12 +4,12 @@ class Solution {
         int[] leftMin = new int[a.length];
         int[] rightMin = new int[a.length];
         int min = a[0];
-        for (int i = 1; i < a.length - 1; i++) {
+        for (int i = 1; i < a.length; i++) {
             leftMin[i] = min;
             min = Math.min(min, a[i]);
         }
         min = a[a.length - 1];
-        for (int i = a.length - 2; i > 0; i--) {
+        for (int i = a.length - 2; i >= 0; i--) {
             rightMin[i] = min;
             min = Math.min(min, a[i]);
         }
