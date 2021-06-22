@@ -3,15 +3,15 @@ class Solution {
     int answer;
 
     public int solution(int n) {
+        col = new int[n];
         for (int i = 0; i < n; i++) {
-            col = new int[n];
             col[0] = i;
-            dfs(n, 1);
+            queen(n, 1);
         }
         return answer;
     }
 
-    public void dfs(int n, int row) {
+    public void queen(int n, int row) {
         if (row == n) {
             answer++;
             return;
@@ -19,7 +19,7 @@ class Solution {
         for (int i = 0; i < n; i++) {
             col[row] = i;
             if (isPossible(row)) {
-                dfs(n, row + 1);
+                queen(n, row + 1);
             }
         }
     }
