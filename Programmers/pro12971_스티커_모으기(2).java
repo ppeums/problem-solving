@@ -16,8 +16,6 @@ class Solution {
             d1[i] = Math.max(d1[i - 2] + sticker[i], d1[i - 1]);
             d2[i] = Math.max(d2[i - 2] + sticker[i], d2[i - 1]);
         }
-        d1[n - 1] = Math.max(d1[n - 2], d1[n - 3]);
-        d2[n - 1] = Math.max(d2[n - 3] + sticker[n - 1], d2[n - 2]);
-        return Math.max(d1[n - 1], d2[n - 1]);
+        return Math.max(d1[n - 2], Math.max(d2[n - 2], d2[n - 3] + sticker[n - 1]));
     }
 }
