@@ -1,24 +1,25 @@
 import java.util.ArrayList;
 
 class Solution {
-    ArrayList<int[]> moveList;
+    ArrayList<int[]> moves;
 
     public int[][] solution(int n) {
-        moveList = new ArrayList<>();
+        moves = new ArrayList<>();
         hanoi(n, 1, 3, 2);
-        int[][] answer = new int[moveList.size()][2];
-        for (int i = 0; i < moveList.size(); i++) {
-            answer[i] = moveList.get(i);
+        int[][] answer = new int[moves.size()][2];
+        for (int i = 0; i < moves.size(); i++) {
+            answer[i] = moves.get(i);
         }
         return answer;
     }
 
     public void hanoi(int n, int start, int end, int mid) {
         if (n == 1) {
-            moveList.add(new int[]{start, end});
+            moves.add(new int[]{start, end});
+            return;
         } else {
             hanoi(n - 1, start, mid, end);
-            moveList.add(new int[]{start, end});
+            moves.add(new int[]{start, end});
             hanoi(n - 1, mid, end, start);
         }
     }
