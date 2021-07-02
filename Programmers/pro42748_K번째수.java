@@ -1,17 +1,17 @@
-import java.util.ArrayList;
 import java.util.Arrays;
 
 class Solution {
     public int[] solution(int[] array, int[][] commands) {
-        ArrayList<Integer> arr = new ArrayList<>();
+        int[] answer = new int[commands.length];
         for (int i = 0; i < commands.length; i++) {
-            int[] tmp = Arrays.copyOfRange(array, commands[i][0] - 1, commands[i][1]);
+            int[] cmd = commands[i];
+            int[] tmp = new int[cmd[1] - cmd[0] + 1];
+            int idx = 0;
+            for (int j = cmd[0] - 1; j < cmd[1]; j++) {
+                tmp[idx++] = array[j];
+            }
             Arrays.sort(tmp);
-            arr.add(tmp[commands[i][2]-1]);
-        }
-        int[] answer = new int[arr.size()];
-        for (int i = 0; i < arr.size(); i++) {
-            answer[i] = arr.get(i);
+            answer[i] = tmp[cmd[2] - 1];
         }
         return answer;
     }
