@@ -4,8 +4,8 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-    static int answer;
     static boolean[] visited;
+    static int MIN, MAX, answer;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -13,7 +13,8 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
-        visited = new boolean[100001];
+        MAX = 100000;
+        visited = new boolean[MAX + 1];
         bfs(N, K);
         bw.write(answer + "\n");
         bw.flush();
@@ -27,33 +28,33 @@ public class Main {
         visited[start] = true;
         while (!q.isEmpty()) {
             int x = q.peek().x;
-            int time = q.peek().time;
+            int sec = q.peek().sec;
             q.poll();
             if (x == target) {
-                answer = time;
-                break;
+                answer = sec;
+                return;
             }
-            if (x - 1 >= 0 && !visited[x - 1]) {
+            if (x - 1 >= MIN && !visited[x - 1]) {
+                q.add(new Point(x - 1, sec + 1));
                 visited[x - 1] = true;
-                q.add(new Point(x - 1, time + 1));
             }
-            if (x + 1 <= 100000 && !visited[x + 1]) {
+            if (x + 1 <= MAX && !visited[x + 1]) {
+                q.add(new Point(x + 1, sec + 1));
                 visited[x + 1] = true;
-                q.add(new Point(x + 1, time + 1));
             }
-            if (x * 2 <= 100000 && !visited[x * 2]) {
+            if (x * 2 <= MAX && !visited[x * 2]) {
+                q.add(new Point(x * 2, sec + 1));
                 visited[x * 2] = true;
-                q.add(new Point(x * 2, time + 1));
             }
         }
     }
 
     static class Point {
-        int x, time;
+        int x, sec;
 
-        public Point(int x, int time) {
+        public Point(int x, int sec) {
             this.x = x;
-            this.time = time;
+            this.sec = sec;
         }
     }
 }
