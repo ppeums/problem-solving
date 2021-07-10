@@ -1,33 +1,27 @@
 import java.util.ArrayList;
+import java.util.List;
 
 class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
-        int len = progresses.length;
-        int[] day = new int[len];
-        int idx = 0, max = 0;
-        ArrayList<Integer> arr = new ArrayList<>();
-        for (int i = 0; i < len; i++) {
-            day[i] = (int) Math.ceil((double) (100 - progresses[i]) / speeds[i]);
+        List<Integer> answer = new ArrayList<>();
+        int[] day = new int[progresses.length];
+        int max = 0, cnt = 0;
+        for (int i = 0; i < progresses.length; i++) {
+            day[i] = (int) Math.ceil((double) (100 - progresses[i]) / (double) speeds[i]);
             if (i == 0) {
-                arr.add(1);
                 max = day[0];
+                cnt++;
             } else {
-                if (day[i - 1] >= day[i])
-                    arr.set(idx, arr.get(idx) + 1);
-                else {
-                    if (max >= day[i])
-                        arr.set(idx, arr.get(idx) + 1);
-                    else {
-                        idx++;
-                        arr.add(1);
-                        max = day[i];
-                    }
+                if (day[i] > max) {
+                    answer.add(cnt);
+                    max = day[i];
+                    cnt = 1;
+                } else {
+                    cnt++;
                 }
             }
         }
-        int[] answer = new int[arr.size()];
-        for (int i = 0; i < arr.size(); i++)
-            answer[i] = arr.get(i);
-        return answer;
+        answer.add(cnt);
+        return answer.stream().mapToInt(i -> i).toArray();
     }
 }
