@@ -1,45 +1,46 @@
-import java.util.Arrays;
-import java.util.HashSet;
-
 class Solution {
-    static HashSet<Integer> hs = new HashSet<>();
-    static boolean[] visit;
-    static String[] s;
-    static String input;
-    static int answer = 0;
+    boolean[] visited, check;
+    String input;
+    int answer;
 
     public int solution(String numbers) {
+        int n = numbers.length();
         input = numbers;
-        s = new String[input.length()];
-        visit = new boolean[input.length()];
-        for (int i = 1; i <= input.length(); i++) {
-            Arrays.fill(s, "");
-            Arrays.fill(visit, false);
-            DFS(0, i);
+        visited = new boolean[n];
+        check = new boolean[10000000];
+        for (int i = 0; i < n; i++) {
+            visited[i] = true;
+            int num = input.charAt(i) - '0';
+            dfs(n, num);
+            visited[i] = false;
         }
         return answer;
     }
 
-    static void DFS(int cnt, int N) {
-        if (cnt == N) {
-            int num = Integer.parseInt(s[N - 1]);
-            if (!hs.contains(num) && num >= 2) {
-                hs.add(num);
-                for (int i = 2; i <= num / 2; i++)
-                    if (num % i == 0) return;
-                answer++;
-            }
-            return;
+    public void dfs(int n, int num) {
+        if (!check[num] && isPrimeNumber(num)) {
+            check[num] = true;
+            answer++;
         }
-        for (int i = 0; i < input.length(); i++) {
-            if (!visit[i]) {
-                String tmp = s[N - 1];
-                s[N - 1] += input.charAt(i);
-                visit[i] = true;
-                DFS(cnt + 1, N);
-                s[N - 1] = tmp;
-                visit[i] = false;
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                int tmp = Integer.parseInt(Integer.toString(num) + input.charAt(i));
+                dfs(n, tmp);
+                visited[i] = false;
             }
         }
+    }
+
+    public boolean isPrimeNumber(int num) {
+        if (num < 2) {
+            return false;
+        }
+        for (int i = 2; i <= num / 2; i++) {
+            if (num % i == 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }
