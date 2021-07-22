@@ -1,23 +1,24 @@
-import java.util.Stack;
-
 class Solution {
     public String solution(String number, int k) {
-        String answer = "";
-        int len = number.length() - k;
-        Stack<Character> st = new Stack<>();
-        for (int i = 0; i < number.length(); i++) {
-            char ch = number.charAt(i);
-            if (!st.isEmpty() && st.peek() < ch && k > 0) {
-                while (true) {
-                    if (st.isEmpty() || st.peek() >= ch || k == 0) break;
-                    st.pop();
-                    k--;
-                }
+        StringBuilder answer = new StringBuilder(number);
+        int idx = 0;
+        while (true) {
+            if (k == 0 || idx >= answer.length() - 1) {
+                break;
             }
-            st.add(ch);
+            if (answer.charAt(idx) < answer.charAt(idx + 1)) {
+                answer = answer.deleteCharAt(idx);
+                k--;
+                if (idx > 0) {
+                    idx--;
+                }
+            } else {
+                idx++;
+            }
         }
-        while (!st.isEmpty())
-            answer = st.pop() + answer;
-        return answer.substring(0, len);
+        if (k > 0) {
+            answer.setLength(answer.length() - k);
+        }
+        return answer.toString();
     }
 }
