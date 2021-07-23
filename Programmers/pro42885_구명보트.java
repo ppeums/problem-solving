@@ -2,15 +2,19 @@ import java.util.Arrays;
 
 class Solution {
     public int solution(int[] people, int limit) {
-        int answer = 0, l = 0, r = people.length - 1;
+        int answer = 0;
         Arrays.sort(people);
-        while (l < r) {
-            if (people[l] + people[r] <= limit)
-                l++;
+        int left = 0, right = people.length - 1;
+        while (left < right) {
+            if (people[left] + people[right] <= limit) {
+                left++;
+            }
+            right--;
             answer++;
-            r--;
         }
-        if (l == r) answer++;
+        if (left == right) {
+            answer++;
+        }
         return answer;
     }
 }
