@@ -1,80 +1,75 @@
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 class Solution {
     public int[] solution(String[] genres, int[] plays) {
+        List<Integer> answer = new ArrayList<>();
         Map<String, Integer> map = new HashMap<>();
-        int genreCnt = 0;
-        for (int i = 0; i < genres.length; i++) {
-            if (!map.containsKey(genres[i])) {
-                map.put(genres[i], genreCnt);
-                genreCnt++;
-            }
+        PriorityQueue<Genre> genreQ = new PriorityQueue<>();
+        int len = plays.length;
+        for (int i = 0; i < len; i++) {
+            map.put(genres[i], map.getOrDefault(genres[i], 0) + plays[i]);
         }
-        ArrayList<Music>[] musicList = new ArrayList[genreCnt];
-        Genre[] sumList = new Genre[genreCnt];
-        for (int i = 0; i < genreCnt; i++) {
-            musicList[i] = new ArrayList<>();
-            sumList[i] = new Genre(i, 0);
+        for (String key : map.keySet()) {
+            genreQ.add(new Genre(key, map.get(key)));
         }
-        for (int i = 0; i < genres.length; i++) {
-            int genreId = map.get(genres[i]);
-            musicList[genreId].add(new Music(i, genres[i], plays[i]));
-            sumList[genreId] = new Genre(genreId, sumList[genreId].playSum + plays[i]);
-        }
-        int answerCnt = 0;
-        for (int i = 0; i < musicList.length; i++) {
-            if (musicList[i].size() > 1) {
-                answerCnt += 2;
-            } else {
-                answerCnt++;
-            }
-        }
-        int[] answer = new int[answerCnt];
-        Arrays.sort(sumList, new Comparator<Genre>() {
-            @Override
-            public int compare(Genre o1, Genre o2) {
-                return Integer.compare(o2.playSum, o1.playSum);
-            }
-        });
-        int idx = 0;
-        for (int i = 0; i < musicList.length; i++) {
-            int genreId = sumList[i].id;
-            Collections.sort(musicList[genreId], new Comparator<Music>() {
-                @Override
-                public int compare(Music o1, Music o2) {
-                    return Integer.compare(o2.play, o1.play);
+        while (!genreQ.isEmpty()) {
+            PriorityQueue<Song> songQ = new PriorityQueue<>();
+            Genre genre = genreQ.poll();
+            int cnt = 0;
+            for (int i = 0; i < len; i++) {
+                if (genres[i].equals(genre.name)) {
+                    songQ.add(new Song(i, plays[i]));
+                    cnt++;
                 }
-            });
-            answer[idx++] = musicList[genreId].get(0).id;
-            if (musicList[genreId].size() > 1) {
-                answer[idx++] = musicList[genreId].get(1).id;
+            }
+            int genreCnt = 0;
+            if (cnt == 1) {
+                genreCnt = 1;
+            } else {
+                genreCnt = 2;
+            }
+            while (genreCnt > 0) {
+                answer.add(songQ.poll().id);
+                genreCnt--;
             }
         }
-        return answer;
+        return answer.stream().mapToInt(i -> i).toArray();
     }
 
-    static class Genre {
-        int id, playSum;
+    class Genre implements Comparable<Genre> {
+        String name;
+        int playSum;
 
-        public Genre(int id, int playSum) {
-            this.id = id;
+        public Genre(String name, int playSum) {
+            this.name = name;
             this.playSum = playSum;
         }
+
+        @Override
+        public int compareTo(Genre o) {
+            return Integer.compare(o.playSum, this.playSum);
+        }
     }
 
-    static class Music {
+    class Song implements Comparable<Song> {
         int id, play;
-        String genre;
 
-        public Music(int id, String genre, int play) {
+        public Song(int id, int play) {
             this.id = id;
-            this.genre = genre;
             this.play = play;
+        }
+
+        @Override
+        public int compareTo(Song o) {
+            if (this.play != o.play) {
+                return Integer.compare(o.play, this.play);
+            } else {
+                return Integer.compare(this.id, o.id);
+            }
         }
     }
 }
