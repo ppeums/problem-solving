@@ -1,63 +1,36 @@
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Collections;
 import java.util.PriorityQueue;
 
 class Solution {
     public int solution(int[][] jobs) {
-        ArrayList<Job> list = new ArrayList<>();
-        for (int i = 0; i < jobs.length; i++) {
-            list.add(new Job(jobs[i][0], jobs[i][1]));
+        PriorityQueue<Job> waitQ = new PriorityQueue<>((Job o1, Job o2) -> Integer.compare(o1.requestTime, o2.requestTime));
+        PriorityQueue<Job> workQ = new PriorityQueue<>((Job o1, Job o2) -> Integer.compare(o1.workTime, o2.workTime));
+        for (int[] job : jobs) {
+            waitQ.add(new Job(job[0], job[1]));
         }
-        Collections.sort(list, new Comparator<Job>() {
-            @Override
-            public int compare(Job o1, Job o2) {
-                if (o1.req > o2.req) {
-                    return 1;
-                } else if (o1.req == o2.req) {
-                    if (o1.time > o2.time) {
-                        return 1;
-                    }
-                }
-                return -1;
+        int timeTotal = 0, jobCount = 0, currentTime = 0;
+        while (jobCount < jobs.length) {
+            while (!waitQ.isEmpty() && (waitQ.peek().requestTime <= currentTime)) {
+                workQ.add(waitQ.poll());
             }
-        });
-        PriorityQueue<Job> pq = new PriorityQueue<>();
-        int answer = 0, now = 0, idx = 0;
-        while (idx < jobs.length) {
-            Job job = list.get(idx);
-            if (job.req <= now) {
-                pq.add(job);
-                idx++;
+            if (!workQ.isEmpty()) {
+                Job job = workQ.poll();
+                timeTotal += currentTime - job.requestTime + job.workTime;
+                currentTime += job.workTime;
+                jobCount++;
             } else {
-                if (pq.isEmpty()) {
-                    now++;
-                } else {
-                    Job top = pq.poll();
-                    answer += now - top.req + top.time;
-                    now += top.time;
-                }
+                currentTime++;
             }
         }
-        while (!pq.isEmpty()) {
-            Job top = pq.poll();
-            answer += now - top.req + top.time;
-            now += top.time;
-        }
-        return answer / jobs.length;
+        return timeTotal / jobCount;
     }
 
-    static class Job implements Comparable<Job> {
-        int req, time;
+    class Job {
+        int requestTime, workTime;
 
-        public Job(int req, int time) {
-            this.req = req;
-            this.time = time;
-        }
-
-        @Override
-        public int compareTo(Job o) {
-            return (time > o.time) ? 1 : -1;
+        public Job(int requestTime, int workTime) {
+            this.requestTime = requestTime;
+            this.workTime = workTime;
         }
     }
 }
