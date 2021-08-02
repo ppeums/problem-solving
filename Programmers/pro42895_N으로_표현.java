@@ -1,32 +1,35 @@
-import java.util.HashSet;
-import java.util.Set;
-
 class Solution {
+    int answer;
+
     public int solution(int N, int number) {
-        Set<Integer>[] set = new Set[9];
-        for (int i = 1; i <= 8; i++) {
-            set[i] = new HashSet<>();
-            int num = 0;
-            for (int j = 0; j < i; j++) {
-                num = num * 10 + N;
-            }
-            set[i].add(num);
-            for (int j = 1; j < i; j++) {
-                for (Integer in : set[j]) {
-                    for (Integer in2 : set[i - j]) {
-                        set[i].add(in + in2);
-                        set[i].add(in - in2);
-                        set[i].add(in * in2);
-                        if (in2 != 0) {
-                            set[i].add(in / in2);
-                        }
-                    }
-                }
-            }
-            if (set[i].contains(number)) {
-                return i;
-            }
+        answer = Integer.MAX_VALUE;
+
+        func(N, number, 0, 0);
+
+        return (answer == Integer.MAX_VALUE) ? -1 : answer;
+    }
+
+    public void func(int N, int number, int cnt, int prev) {
+        if (cnt > 8) {
+            return;
         }
-        return -1;
+
+        if (prev == number) {
+            answer = Math.min(answer, cnt);
+            return;
+        }
+
+        int tmp = N;
+
+        for (int i = 0; i < 8 - cnt; i++) {
+            int nextCnt = cnt + 1 + i;
+
+            func(N, number, nextCnt, prev + tmp);
+            func(N, number, nextCnt, prev - tmp);
+            func(N, number, nextCnt, prev * tmp);
+            func(N, number, nextCnt, prev / tmp);
+
+            tmp = tmp * 10 + N;
+        }
     }
 }
