@@ -1,28 +1,36 @@
-import java.util.Comparator;
 import java.util.PriorityQueue;
 
 class Solution {
     public int solution(int[][] jobs) {
-        PriorityQueue<Job> waitQ = new PriorityQueue<>((Job o1, Job o2) -> Integer.compare(o1.requestTime, o2.requestTime));
-        PriorityQueue<Job> workQ = new PriorityQueue<>((Job o1, Job o2) -> Integer.compare(o1.workTime, o2.workTime));
+        int answer = 0;
+        int currentTime = 0;
+
+        PriorityQueue<Job> waitQ = new PriorityQueue<>((o1, o2) -> Integer.compare(o1.requestTime, o2.requestTime));
+        PriorityQueue<Job> workQ = new PriorityQueue<>((o1, o2) -> Integer.compare(o1.workTime, o2.workTime));
+
         for (int[] job : jobs) {
             waitQ.add(new Job(job[0], job[1]));
         }
-        int timeTotal = 0, jobCount = 0, currentTime = 0;
-        while (jobCount < jobs.length) {
+
+        while (true) {
+            if (waitQ.isEmpty() && workQ.isEmpty()) {
+                break;
+            }
+
             while (!waitQ.isEmpty() && (waitQ.peek().requestTime <= currentTime)) {
                 workQ.add(waitQ.poll());
             }
+
             if (!workQ.isEmpty()) {
                 Job job = workQ.poll();
-                timeTotal += currentTime - job.requestTime + job.workTime;
                 currentTime += job.workTime;
-                jobCount++;
+                answer += currentTime - job.requestTime;
             } else {
                 currentTime++;
             }
         }
-        return timeTotal / jobCount;
+
+        return answer / jobs.length;
     }
 
     class Job {
