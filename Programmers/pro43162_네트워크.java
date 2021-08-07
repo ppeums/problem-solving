@@ -1,28 +1,28 @@
 class Solution {
-    static int N;
-    static int[][] map;
-    static boolean[] visit;
+    int[][] map;
+    boolean[] visited;
 
     public int solution(int n, int[][] computers) {
         int answer = 0;
-        N = n;
         map = computers;
-        visit = new boolean[n];
+        visited = new boolean[n];
+
         for (int i = 0; i < n; i++) {
-            if (!visit[i]) {
-                visit[i] = true;
-                DFS(i);
+            if (!visited[i]) {
+                visited[i] = true;
                 answer++;
+                dfs(i, n);
             }
         }
+
         return answer;
     }
 
-    static void DFS(int start) {
-        for (int i = 0; i < N; i++) {
-            if (!visit[i] && map[i][start] == 1) {
-                visit[i] = true;
-                DFS(i);
+    public void dfs(int start, int n) {
+        for (int i = 0; i < n; i++) {
+            if (!visited[i] && map[start][i] == 1) {
+                visited[i] = true;
+                dfs(i, n);
             }
         }
     }
