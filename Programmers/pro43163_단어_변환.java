@@ -1,37 +1,48 @@
 class Solution {
-    static int answer;
-    static String key;
-    static String[] arr;
-    static boolean[] visit;
+    String[] input;
+    boolean[] visited;
+    int answer;
 
     public int solution(String begin, String target, String[] words) {
         answer = Integer.MAX_VALUE;
-        key = target;
-        arr = words;
-        visit = new boolean[words.length];
-        dfs(begin, 0);
+        input = words;
+        visited = new boolean[words.length];
+
+        for (int i = 0; i < words.length; i++) {
+            if (getDiffCnt(begin, words[i]) == 1) {
+                visited[i] = true;
+                dfs(1, words[i], target, begin + words[i]);
+                visited[i] = false;
+            }
+        }
+
         return (answer == Integer.MAX_VALUE) ? 0 : answer;
     }
 
-    static void dfs(String before, int cnt) {
-        if (before.equals(key)) {
-            answer = Math.min(answer, cnt);
+    public void dfs(int changeCnt, String before, String target, String result) {
+        if (before.equals(target)) {
+            answer = Math.min(answer, changeCnt);
             return;
         }
-        for (int i = 0; i < arr.length; i++) {
-            if (!visit[i]) {
-                int diff = 0;
-                for (int j = 0; j < before.length(); j++) {
-                    if (before.charAt(j) != arr[i].charAt(j)) {
-                        diff++;
-                    }
-                }
-                if (diff == 1) {
-                    visit[i] = true;
-                    dfs(arr[i], cnt + 1);
-                    visit[i] = false;
-                }
+
+        for (int i = 0; i < input.length; i++) {
+            if (!visited[i] && getDiffCnt(before, input[i]) == 1) {
+                visited[i] = true;
+                dfs(changeCnt + 1, input[i], target, result + input[i]);
+                visited[i] = false;
             }
         }
+    }
+
+    public int getDiffCnt(String s1, String s2) {
+        int diffCnt = 0;
+
+        for (int i = 0; i < s1.length(); i++) {
+            if (s1.charAt(i) != s2.charAt(i)) {
+                diffCnt++;
+            }
+        }
+
+        return diffCnt;
     }
 }
