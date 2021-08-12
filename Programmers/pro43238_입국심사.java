@@ -2,20 +2,29 @@ import java.util.Arrays;
 
 class Solution {
     public long solution(int n, int[] times) {
+        long answer = Long.MAX_VALUE;
+
         Arrays.sort(times);
-        long answer = Long.MAX_VALUE, left = 1, right = n * (long) times[times.length - 1];
+
+        long left = 0;
+        long right = (long) times[0] * n;
+
         while (left <= right) {
-            long mid = (left + right) / 2, sum = 0;
+            long mid = (left + right) / 2;
+            long sum = 0;
+
             for (int i = 0; i < times.length; i++) {
                 sum += mid / times[i];
             }
+
             if (sum < n) {
                 left = mid + 1;
             } else {
-                answer = Math.min(answer, mid);
                 right = mid - 1;
+                answer = Math.min(answer, mid);
             }
         }
+
         return answer;
     }
 }
