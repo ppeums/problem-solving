@@ -1,51 +1,63 @@
-import java.util.Arrays;
-
 class Solution {
-    static int[] dist;
-    static boolean[] visit;
-    static boolean[][] link;
+    int[] dist;
+    boolean[] visited;
+    boolean[][] connected;
 
     public int solution(int n, int[][] edge) {
         int answer = 0;
+        int max = 0;
         dist = new int[n + 1];
-        visit = new boolean[n + 1];
-        link = new boolean[n + 1][n + 1];
-        for (int i = 0; i < edge.length; i++) {
-            link[edge[i][0]][edge[i][1]] = true;
-            link[edge[i][1]][edge[i][0]] = true;
+        visited = new boolean[n + 1];
+        connected = new boolean[n + 1][n + 1];
+
+        for (int[] v : edge) {
+            connected[v[0]][v[1]] = true;
+            connected[v[1]][v[0]] = true;
         }
+
         dijkstra(n);
-        Arrays.sort(dist, 1, n + 1);
+
         for (int i = 1; i <= n; i++) {
-            if (dist[n] == dist[i]) {
+            max = Math.max(max, dist[i]);
+        }
+
+        for (int i = 1; i <= n; i++) {
+            if (dist[i] == max) {
                 answer++;
             }
         }
+
         return answer;
     }
 
-    static void dijkstra(int n) {
-        Arrays.fill(dist, Integer.MAX_VALUE);
-        dist[1] = 0;
-        visit[1] = true;
+    public void dijkstra(int n) {
         for (int i = 1; i <= n; i++) {
-            if (link[1][i]) {
+            if (connected[i][1]) {
                 dist[i] = 1;
+            } else {
+                dist[i] = Integer.MAX_VALUE;
             }
         }
-        for (int i = 0; i < n - 1; i++) {
+
+        dist[1] = 0;
+        visited[1] = true;
+
+        for (int t = 0; t < n; t++) {
             int min = Integer.MAX_VALUE;
-            int idx = -1;
-            for (int j = 1; j <= n; j++) {
-                if (!visit[j] && dist[j] < min) {
-                    min = dist[j];
-                    idx = j;
+            int idx = 0;
+
+            for (int i = 1; i <= n; i++) {
+                if (!visited[i] && (min > dist[i])) {
+                    min = dist[i];
+                    idx = i;
                 }
             }
-            visit[idx] = true;
-            for (int j = 1; j <= n; j++) {
-                if (!visit[j] && link[idx][j] && dist[j] > dist[idx] + 1) {
-                    dist[j] = dist[idx] + 1;
+
+            visited[idx] = true;
+
+            for (int i = 1; i <= n; i++) {
+                if (!visited[i] && connected[i][idx] && (dist[i] > dist[idx] + 1)) {
+                    dist[i] = dist[idx] + 1;
                 }
             }
         }
