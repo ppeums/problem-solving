@@ -2,10 +2,9 @@ import java.util.Arrays;
 
 class Solution {
     public long solution(int n, int[] times) {
-        long answer = Long.MAX_VALUE;
-
         Arrays.sort(times);
 
+        long answer = Long.MAX_VALUE;
         long left = 0;
         long right = (long) times[0] * n;
 
