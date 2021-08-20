@@ -47,7 +47,7 @@ class Solution {
             int idx = 0;
 
             for (int i = 1; i <= n; i++) {
-                if (!visited[i] && (min > dist[i])) {
+                if (!visited[i] && (dist[i] < min)) {
                     min = dist[i];
                     idx = i;
                 }
