@@ -22,11 +22,11 @@ class Solution {
                 Set<Integer> winSet = new HashSet<>();
                 Set<Integer> loseSet = new HashSet<>();
 
-                for (int w : win[i]) {
+                for (Integer w : win[i]) {
                     winSet.addAll(win[w]);
                 }
 
-                for (int l : lose[i]) {
+                for (Integer l : lose[i]) {
                     loseSet.addAll(lose[l]);
                 }
 
