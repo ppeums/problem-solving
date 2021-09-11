@@ -11,10 +11,10 @@ class Solution {
 
         init(n);
 
-        for (int[] cost : costs) {
-            if (find(cost[0]) != find(cost[1])) {
-                union(cost[0], cost[1]);
-                answer += cost[2];
+        for (int[] c : costs) {
+            if (find(c[0]) != find(c[1])) {
+                union(c[0], c[1]);
+                answer += c[2];
             }
         }
 
@@ -31,6 +31,7 @@ class Solution {
         if (parent[x] == x) {
             return x;
         }
+
         return find(parent[x]);
     }
 
