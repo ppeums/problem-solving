@@ -3,25 +3,29 @@ import java.util.List;
 
 class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
+        int n = progresses.length;
+        int[] arr = new int[n];
         List<Integer> answer = new ArrayList<>();
-        int[] day = new int[progresses.length];
-        int max = 0, cnt = 0;
-        for (int i = 0; i < progresses.length; i++) {
-            day[i] = (int) Math.ceil((double) (100 - progresses[i]) / (double) speeds[i]);
-            if (i == 0) {
-                max = day[0];
-                cnt++;
+
+        for (int i = 0; i < n; i++) {
+            arr[i] = (int) Math.ceil((double) (100 - progresses[i]) / speeds[i]);
+        }
+
+        int cnt = 1;
+        int max = arr[0];
+
+        for (int i = 1; i < n; i++) {
+            if (arr[i] > max) {
+                answer.add(cnt);
+                cnt = 1;
+                max = arr[i];
             } else {
-                if (day[i] > max) {
-                    answer.add(cnt);
-                    max = day[i];
-                    cnt = 1;
-                } else {
-                    cnt++;
-                }
+                cnt++;
             }
         }
+
         answer.add(cnt);
+
         return answer.stream().mapToInt(i -> i).toArray();
     }
 }
