@@ -1,11 +1,11 @@
 class Solution {
-    int[][] map;
     boolean[] visited;
+    int[][] connect;
+    int answer;
 
     public int solution(int n, int[][] computers) {
-        int answer = 0;
-        map = computers;
         visited = new boolean[n];
+        connect = computers;
 
         for (int i = 0; i < n; i++) {
             if (!visited[i]) {
@@ -18,9 +18,9 @@ class Solution {
         return answer;
     }
 
-    public void dfs(int start, int n) {
+    public void dfs(int before, int n) {
         for (int i = 0; i < n; i++) {
-            if (!visited[i] && map[start][i] == 1) {
+            if (!visited[i] && connect[before][i] == 1) {
                 visited[i] = true;
                 dfs(i, n);
             }
