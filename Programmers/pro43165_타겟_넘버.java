@@ -4,18 +4,22 @@ class Solution {
 
     public int solution(int[] numbers, int target) {
         input = numbers;
-        findTarget(0, 0, target);
+
+        dfs(0, 0, numbers.length, target);
+
         return answer;
     }
 
-    public void findTarget(int cnt, int sum, int target) {
-        if (cnt == input.length) {
+    public void dfs(int idx, int sum, int n, int target) {
+        if (idx == n) {
             if (sum == target) {
                 answer++;
             }
+
             return;
         }
-        findTarget(cnt + 1, sum + input[cnt], target);
-        findTarget(cnt + 1, sum - input[cnt], target);
+
+        dfs(idx + 1, sum - input[idx], n, target);
+        dfs(idx + 1, sum + input[idx], n, target);
     }
 }
