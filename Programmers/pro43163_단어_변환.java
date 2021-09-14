@@ -1,48 +1,49 @@
 class Solution {
-    String[] input;
     boolean[] visited;
+    String[] input;
     int answer;
+    int n;
 
     public int solution(String begin, String target, String[] words) {
-        answer = Integer.MAX_VALUE;
+        n = words.length;
         input = words;
-        visited = new boolean[words.length];
+        visited = new boolean[n];
 
-        for (int i = 0; i < words.length; i++) {
-            if (getDiffCnt(begin, words[i]) == 1) {
+        for (int i = 0; i < n; i++) {
+            if (!visited[i] && (countDiff(begin, input[i]) == 1)) {
                 visited[i] = true;
-                dfs(1, words[i], target, begin + words[i]);
+                dfs(1, n, input[i], target);
                 visited[i] = false;
             }
         }
 
-        return (answer == Integer.MAX_VALUE) ? 0 : answer;
+        return answer;
     }
 
-    public void dfs(int changeCnt, String before, String target, String result) {
+    public void dfs(int cnt, int n, String before, String target) {
         if (before.equals(target)) {
-            answer = Math.min(answer, changeCnt);
+            answer = (answer == 0) ? cnt : Math.min(answer, cnt);
             return;
         }
 
-        for (int i = 0; i < input.length; i++) {
-            if (!visited[i] && getDiffCnt(before, input[i]) == 1) {
+        for (int i = 0; i < n; i++) {
+            if (!visited[i] && (countDiff(before, input[i]) == 1)) {
                 visited[i] = true;
-                dfs(changeCnt + 1, input[i], target, result + input[i]);
+                dfs(cnt + 1, n, input[i], target);
                 visited[i] = false;
             }
         }
     }
 
-    public int getDiffCnt(String s1, String s2) {
-        int diffCnt = 0;
+    public int countDiff(String s1, String s2) {
+        int cnt = 0;
 
         for (int i = 0; i < s1.length(); i++) {
             if (s1.charAt(i) != s2.charAt(i)) {
-                diffCnt++;
+                cnt++;
             }
         }
 
-        return diffCnt;
+        return cnt;
     }
 }
